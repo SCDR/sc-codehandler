@@ -33,6 +33,14 @@ class DocxHandler:
                 self.zhFontName = docxConfig["zhFontName"]
                 self.titleSuffix = docxConfig["titleSuffix"]
                 self.templatePath = docxConfig["templatePath"]
+                self.lineCount=0
+                fh=FileHandler()
+                self.files = fh.findFilesWithExtension()
+                for file in self.files:
+                    with open(file, "r", encoding="utf-8") as f:
+                        self.lineCount+=len(f.readlines())
+                self.needPartitions=self.lineCount>self.pageSize*50
+
             except Exception as e:
                 print("配置文件读取失败", e)
                 exit()
@@ -73,8 +81,6 @@ class DocxHandler:
         """处理docx正文"""
         # 初始化文件处理对象，获取源代码文件列表
         fh = FileHandler()
-
-        files = fh.findFilesWithExtension()
         # 设置页眉
         # self.docxDocument.add_section(WD_SECTION_START.NEW_PAGE)
         header = self.docxDocument.sections[1].header
@@ -102,9 +108,35 @@ class DocxHandler:
         # footer.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
 
         # 生成docx正文
+        if self.needPartitions:
+            self.inputPartition()
+        else:
+            self.inputWithoutPartition()
+
+        # 保存
+        self.saveDocx()
+
+    def inputWithoutPartition(self):
+        for i, file in enumerate(self.files):
+            # 文件名
+            heading1 = self.docxDocument.add_heading(level=1)
+            run = heading1.add_run(os.path.basename(file) + ":")
+            run.bold = True
+            run.font.name = self.enFontName
+            run.element.rPr.rFonts.set(qn("w:eastAsia"), self.zhFontName)
+            heading1.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            # 源代码内容
+            para = self.docxDocument.add_paragraph()
+            para.style.font.size = Pt(9)
+
+            with open(file, "r", encoding="utf-8") as f:
+                for line in f.readlines():
+                    para.add_run(line)
+
+    def inputPartition(self):
         linesCount = 0
         flagOf30 = False
-        for i, file in enumerate(files):
+        for i, file in enumerate(self.files):
             if flagOf30:
                 break
             # 文件名
@@ -126,10 +158,10 @@ class DocxHandler:
                         flagOf30 = True
                         break
         if flagOf30:
-            files.reverse()
+            self.files.reverse()
             flagOf30 = False
             linesCount = 0
-            for i, file in enumerate(files):
+            for i, file in enumerate(self.files):
                 if flagOf30:
                     break
 
@@ -151,9 +183,6 @@ class DocxHandler:
                         if linesCount >= self.pageSize / 2 * 50:
                             flagOf30 = True
                             break
-
-        # 保存
-        self.saveDocx()
 
     def addFirstPage(self):
         """生成docx封面"""
