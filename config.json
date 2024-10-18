@@ -1,6 +1,6 @@
 {
     "info":{
-        "name":"defult"
+        "name":"应用名称"
     },
     "docx":{
         "pageSize":60,
@@ -13,6 +13,6 @@
     },
     "codeFile":{
         "extensions":["py","java"],
-        "directory":"/Users/yushaochen/Code/Java/lims"
+        "directory":"/源代码/目录"
     }
 }
