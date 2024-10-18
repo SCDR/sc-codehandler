@@ -6,4 +6,5 @@
 ## 运行
 
 - 安装依赖后配置config.json中的源代码目录codeFile.directory和项目名称info.name
+- codeFile.extensions配置文件后缀
 - 入口为src/run.py
