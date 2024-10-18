@@ -1,0 +1,18 @@
+{
+    "info":{
+        "name":"defult"
+    },
+    "docx":{
+        "pageSize":60,
+        "HeaderFontSize":26,
+        "enFontName":"Times New Roman",
+        "zhFontName":"宋体",
+        "Heading1FontSize":12,
+        "titleSuffix":"程序鉴别材料",
+        "templatePath":"./res/template.docx"
+    },
+    "codeFile":{
+        "extensions":["py","java"],
+        "directory":"/Users/yushaochen/Code/Java/lims"
+    }
+}
