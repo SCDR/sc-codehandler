@@ -212,7 +212,7 @@ class DocxHandler:
         if docxPath is None:
             docxPath = self.docxPath
         # 初始化文件夹并保存docx
-        if not os.path.exists(docxPath):
+        if not os.path.exists(os.path.dirname(docxPath)):
             os.makedirs(os.path.dirname(docxPath))
         self.docxDocument.save(self.docxPath)
 
