@@ -3,7 +3,7 @@ import glob
 import json
 
 class FileHandler:
-    def __init__(self) -> None:
+    def __init__(self,extensions=None,directory=None) -> None:
         curPath=os.path.abspath(__file__)
         parentPath=os.path.dirname(os.path.dirname(curPath))
         fileName="config.json"
@@ -12,8 +12,8 @@ class FileHandler:
             try:
                 config=json.load(file)
                 codeFileConfig=config["codeFile"]
-                self.extensions=codeFileConfig["extensions"]
-                self.directory = codeFileConfig["directory"]
+                self.extensions= extensions if extensions is not (None or "") else codeFileConfig["extensions"]
+                self.directory = directory if directory is not (None or "") else codeFileConfig["directory"]
             except Exception as e:
                 print("配置文件读取失败",e)
                 exit()

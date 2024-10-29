@@ -14,32 +14,62 @@ from file_handler import FileHandler
 
 # 处理Docx文件
 class DocxHandler:
-    def __init__(self) -> None:
+
+    def __init__(
+        self,
+        name=None,
+        pageSize=None,
+        HeaderFontSize=None,
+        Heading1FontSize=None,
+        enFontName=None,
+        zhFontName=None,
+        titleSuffix=None,
+        templatePath=None,
+        extensions=None,
+        directory=None,
+    ) -> None:
         # 获取配置信息
         curPath = os.path.abspath(__file__)
         parentPath = os.path.dirname(os.path.dirname(curPath))
         fileName = "config.json"
         filePath = os.path.join(parentPath, fileName)
-        with open(filePath, "r", encoding="utf-8") as file:
+        with open(filePath, "r", encoding="utf-8") as configfile:
             try:
-                config = json.load(file)
+                config = json.load(configfile)
                 infoConfig = config["info"]
                 docxConfig = config["docx"]
-                self.name = infoConfig["name"]
-                self.pageSize = docxConfig["pageSize"]
-                self.HeaderFontSize = docxConfig["HeaderFontSize"]
-                self.Heading1FontSize = docxConfig["Heading1FontSize"]
-                self.enFontName = docxConfig["enFontName"]
-                self.zhFontName = docxConfig["zhFontName"]
-                self.titleSuffix = docxConfig["titleSuffix"]
-                self.templatePath = docxConfig["templatePath"]
-                self.lineCount=0
-                fh=FileHandler()
-                self.files = fh.findFilesWithExtension()
+                codeFileConfig = config["codeFile"]
+                self.name = name if name is not (None or "") else infoConfig["name"]
+                self.pageSize = pageSize if pageSize is not (None or 0) else docxConfig["pageSize"]
+                self.HeaderFontSize = HeaderFontSize if HeaderFontSize is not (None or 0) else docxConfig["HeaderFontSize"]
+                self.Heading1FontSize = Heading1FontSize if Heading1FontSize is not (None or 0) else docxConfig["Heading1FontSize"]
+                self.enFontName = enFontName if enFontName is not (None or "") else docxConfig["enFontName"]
+                self.zhFontName = zhFontName if zhFontName is not (None or "") else docxConfig["zhFontName"]
+                self.titleSuffix = titleSuffix if titleSuffix is not (None or "") else docxConfig["titleSuffix"]
+                self.templatePath = templatePath if templatePath is not (None or "") else docxConfig["templatePath"]
+                self.extensions = extensions if extensions is not (None or [] or "") else codeFileConfig["extensions"]
+                self.directory = directory if directory is not (None or "") else codeFileConfig["directory"]
+                # self.pageSize = docxConfig["pageSize"]
+                # self.HeaderFontSize = docxConfig["HeaderFontSize"]
+                # self.Heading1FontSize = docxConfig["Heading1FontSize"]
+                # self.enFontName = docxConfig["enFontName"]
+                # self.zhFontName = docxConfig["zhFontName"]
+                # self.titleSuffix = docxConfig["titleSuffix"]
+                # self.templatePath = docxConfig["templatePath"]
+
+                # self.extensions = codeFileConfig["extensions"]
+                # self.directory = codeFileConfig["directory"]
+
+                self.lineCount = 0
+                fh = FileHandler(self.extensions, self.directory)
+                self.files = fh.findFilesWithExtension(
+                    extensions=self.extensions, directory=self.directory
+                )
                 for file in self.files:
                     with open(file, "r", encoding="utf-8") as f:
-                        self.lineCount+=len(f.readlines())
-                self.needPartitions=self.lineCount>self.pageSize*50
+                        self.lineCount += len(f.readlines())
+                self.needPartitions = self.lineCount > self.pageSize * 50
+                print("总行数:", self.lineCount, ",是否需要分页:", self.needPartitions)
 
             except Exception as e:
                 print("配置文件读取失败", e)
@@ -76,6 +106,7 @@ class DocxHandler:
 
         # 设置标题
         self.addFirstPage()
+
 
     def process(self):
         """处理docx正文"""
@@ -115,6 +146,7 @@ class DocxHandler:
 
         # 保存
         self.saveDocx()
+        return self.docxPath
 
     def inputWithoutPartition(self):
         for i, file in enumerate(self.files):
@@ -217,5 +249,5 @@ class DocxHandler:
         self.docxDocument.save(self.docxPath)
 
 
-dh = DocxHandler()
-dh.process()
+# dh = DocxHandler()
+# dh.process()
