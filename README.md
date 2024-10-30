@@ -5,9 +5,12 @@
 
 ## 运行
 
-- 安装依赖后配置config.json中的源代码目录codeFile.directory和项目名称info.name
-- codeFile.extensions配置文件后缀
-- 入口为src/run.py
+- 运行start.sh安装依赖并运行，在浏览器打开目标地址
+
+## 配置
+- 在浏览器中进行相关配置，处理后下载目标文件
+![image](https://github.com/user-attachments/assets/1aa75105-af46-4fd6-9ac9-a4afa20da8ca)
+
 
 ## 效果
 封面
