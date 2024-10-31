@@ -9,8 +9,7 @@
 
 ## 配置
 - 在浏览器中进行相关配置，处理后下载目标文件
-![image](https://github.com/user-attachments/assets/1aa75105-af46-4fd6-9ac9-a4afa20da8ca)
-
+![image](https://github.com/user-attachments/assets/ea32410b-2f4c-4d21-88a6-52b4aadc1c68)
 
 ## 效果
 封面
