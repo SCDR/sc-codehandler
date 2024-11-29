@@ -1,4 +1,4 @@
-from docx_handler import DocxHandler
+from src.docx_handler import DocxHandler
 
 if __name__ == "__main__":
     print("init")
