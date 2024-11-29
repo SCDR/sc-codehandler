@@ -15,7 +15,7 @@ def initAndProcess(
     extensions=None,
     directory=None,
 ):
-    print("extensions:",extensions)
+    # print("extensions:",extensions)
     dh = DocxHandler(
         name=name,
         pageSize=pageSize,
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         for f in os.listdir("./res")
         if (os.path.isfile(os.path.join("./res", f)) and f.endswith(".docx"))
     ])
-    print(templatePaths)
+    # print(templatePaths)
 
     def addExtension(inputs):
         inputs.append("")
@@ -67,8 +67,8 @@ if __name__ == "__main__":
             for f in os.listdir("./res")
             if (os.path.isfile(os.path.join("./res", f)) and f.endswith(".docx"))
         ]
-        print("onLoad ")
-        print(templatePaths.value)
+        # print("onLoad ")
+        # print(templatePaths.value)
         t.choices = templatePaths.value
         return gr.Radio(
             label="模板路径",
